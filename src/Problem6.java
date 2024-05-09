@@ -3,8 +3,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
+/*
+* 6.
+- 재귀적 호출 이해(7번과 같이 재귀적 호출/함수 필요)
+- 문제의 파일 리스트 배열에 넣어놓고, 중복된 파일명을 입력하여 파일명이 정상적으로 바뀌는 지 확인
+- java.io 또는 java.nio 이용하여 실제 디렉토리의 파일을 읽어서 진행해 볼 것(옵션)
+
+* */
 public class Problem6 {
     public static void main(String[] args) throws IOException {
+        List<String> list = new ArrayList<>();
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         Map<FileName, Integer> map = new HashMap<>();
@@ -42,6 +51,7 @@ class FileName {
     public void setNum(int num) {
         this.num = String.valueOf(num);
     }
+
     public FileName(String input) {
         String[] file = parseFileName(input);
         this.name = file[0];
@@ -59,7 +69,7 @@ class FileName {
     // file 이름만 파싱하는 기능
     private String[] parseFileName(String input) {
         String[] result = new String[3];
-        String[] name = input.split("\\.");
+        String[] name = input.split("\\."); // 마지막 . 찾기
         result[2] = name[1];
 
         if (name[0].contains("(") && name[1].contains(")")) {

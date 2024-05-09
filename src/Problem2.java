@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Problem2 {
@@ -11,7 +12,11 @@ public class Problem2 {
                 {1, 21, 25, 29, 34, 37, 36}
         };
 
-        unionArr(arr);
+        int[] result = unionArr(arr);
+        Arrays.sort(result);
+        for(int num : result) {
+            System.out.print(num + " ");
+        }
     }
 
     private static int[] unionArr(int[][] arr) {
