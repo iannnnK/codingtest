@@ -17,14 +17,16 @@ public class Problem6 {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         Map<FileName, Integer> map = new HashMap<>();
-        while(true) {
+        while (true) {
             String input = br.readLine();
-            if("stop".equals(input)) {
+            if ("stop".equals(input)) {
                 break;
             }
             createFile(input, map);
             System.out.println();
         }
+
+        //
 
     }
 
@@ -34,7 +36,7 @@ public class Problem6 {
 //            map.compute(file, (k, num) -> num + 1);
             int num = map.get(file);
             map.put(file, num + 1);
-            file.setNum(num + 1);
+//            file.setNum(num + 1);
         } else {
             map.put(file, 0);
         }
@@ -45,42 +47,58 @@ public class Problem6 {
 
 class FileName {
     private String name;
-    private String num;
+    private int num;
     private String ext;
-
-    public void setNum(int num) {
-        this.num = String.valueOf(num);
-    }
+    private FileName next;
 
     public FileName(String input) {
-        String[] file = parseFileName(input);
-        this.name = file[0];
-        this.num = file[1];
-        this.ext = file[2];
-    }
-
-    public FileName(String name, int num, String ext) {
-        this.name = name;
-        this.num = String.valueOf(num);
-        this.ext = ext;
-        System.out.println(toString());
+        parseFileName(input);
     }
 
     // file 이름만 파싱하는 기능
-    private String[] parseFileName(String input) {
-        String[] result = new String[3];
-        String[] name = input.split("\\."); // 마지막 . 찾기
-        result[2] = name[1];
+    private void parseFileName(String input) {
+        int dotIdx = input.lastIndexOf('.');
+        String name = input.substring(0, dotIdx);
+        extractNumberIdx(name);
+        this.ext = input.substring(dotIdx);
+    }
 
-        if (name[0].contains("(") && name[1].contains(")")) {
-            int numIdx = name[0].indexOf('(');
-            result[0] = name[0].substring(0, numIdx);
-            result[1] = name[0].substring(numIdx);
-            return result;
+    // 적절한 위치에 괄호와 숫자가 존재하는지 판별
+    private void extractNumberIdx(String name) {
+        int open = name.lastIndexOf('(');
+        int close = name.lastIndexOf(')');
+
+        if (close == -1 || close != name.length() - 1 || open == -1)
+            return;
+
+        String number = name.substring(open + 1, close);
+        System.out.println("괄호 안 문자열 : " + number);
+        for (char num : number.toCharArray()) {
+            if (!Character.isDigit(num)) {
+                return;
+            }
         }
-        result[0] = name[0];
-        result[1] = "";
-        return result;
+
+        this.num = Integer.parseInt(number);
+        this.name = name.substring(0, open);
+        return;
+    }
+
+    private void createNewFile(FileName o) {
+
+        // checkDuplicateName()
+
+    }
+
+    private boolean checkDuplicateName() {
+        // name - null, "" 체크
+
+        // 같은지
+            // 같으면 num - null, "" 체크
+
+            // num 같은지
+            // 다르면
+        return false;
     }
 
     @Override
