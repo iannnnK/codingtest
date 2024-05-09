@@ -1,6 +1,7 @@
-import java.lang.reflect.Array;
 import java.security.SecureRandom;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Problem3 {
     public static void main(String[] args) {

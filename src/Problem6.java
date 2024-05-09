@@ -1,24 +1,96 @@
-import java.util.HashMap;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
 
 public class Problem6 {
-    public static void main(String[] args) {
-        String input = "20200309_최종_확정2.png";
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] fileName = input.split(".");
-        fileRename(fileName);
+        Map<FileName, Integer> map = new HashMap<>();
+        while(true) {
+            String input = br.readLine();
+            if("stop".equals(input)) {
+                break;
+            }
+            createFile(input, map);
+            System.out.println();
+        }
+
     }
 
-    public static void fileRename(String[] input) {
+    private static void createFile(String input, Map<FileName, Integer> map) {
+        FileName file = new FileName(input);
+        if (map.containsKey(file)) {
+//            map.compute(file, (k, num) -> num + 1);
+            int num = map.get(file);
+            map.put(file, num + 1);
+            file.setNum(num + 1);
+        } else {
+            map.put(file, 0);
+        }
 
-        // 파일 저장
-        // 같은 이름의 파일이 있으면 해당 키의 밸류 개수 이상으로 번호를 매긴 뒤, 출력
-        HashMap<String, List<Integer>> map = new HashMap<>();
-//        if(map.containsKey(input[0])) {
-//            int number = map.get(input[0]).size() + 1;
-//            map.put()
-//        }
+        System.out.println(file);
+    }
+}
 
-        // 확장자가 다를 경우 같은 이름이 아니므로 해당 부분 고려는 추후에 해보기
+class FileName {
+    private String name;
+    private String num;
+    private String ext;
+
+    public void setNum(int num) {
+        this.num = String.valueOf(num);
+    }
+    public FileName(String input) {
+        String[] file = parseFileName(input);
+        this.name = file[0];
+        this.num = file[1];
+        this.ext = file[2];
+    }
+
+    public FileName(String name, int num, String ext) {
+        this.name = name;
+        this.num = String.valueOf(num);
+        this.ext = ext;
+        System.out.println(toString());
+    }
+
+    // file 이름만 파싱하는 기능
+    private String[] parseFileName(String input) {
+        String[] result = new String[3];
+        String[] name = input.split("\\.");
+        result[2] = name[1];
+
+        if (name[0].contains("(") && name[1].contains(")")) {
+            int numIdx = name[0].indexOf('(');
+            result[0] = name[0].substring(0, numIdx);
+            result[1] = name[0].substring(numIdx);
+            return result;
+        }
+        result[0] = name[0];
+        result[1] = "";
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FileName fileName = (FileName) o;
+        return Objects.equals(name, fileName.name) && Objects.equals(ext, fileName.ext);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, ext);
+    }
+
+    @Override
+    public String toString() {
+        if ("".equals(num)) {
+            return name + "." + ext;
+        }
+        return name + "(" + num + ")." + ext;
     }
 }
