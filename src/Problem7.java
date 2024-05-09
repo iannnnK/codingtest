@@ -2,32 +2,44 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-// 수열이 잘못됨
+
+// TODO
+//  수열이 잘못됨
+//  재귀 함수 다시 공부
 public class Problem7 {
+    private static String[] arr;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String result = createAnt(Integer.parseInt(br.readLine()));
+        String num = br.readLine();
+        arr = new String[Integer.parseInt(num)];
+        createAnt(Integer.parseInt(num));
 
-        System.out.println(result);
+        for (int i = 0; i < arr.length; i++) {
+            System.out.println(arr[i]);
+        }
     }
 
-    private static String createAnt(int num) {
+    private static void createAnt(int num) {
         if (num == 1) {
-            return "1";
+            arr[0] = "1";
+            return;
         }
 
         StringBuilder sb = new StringBuilder();
-        String pre = createAnt(num - 1);
+        createAnt(num - 1);
+        String pre = arr[num - 2];
+
         int count = 1;
 
         for (int i = 0; i < pre.length(); i++) {
-            if (i + 1 >= pre.length() || pre.charAt(i) != pre.charAt(i + 1)) {
-                sb.append(count).append(pre.charAt(i));
-                count = 1;
+            if (i + 1 < pre.length() && pre.charAt(i) == pre.charAt(i + 1)) {
+                count++;
                 continue;
             }
-            count++;
+            sb.append(pre.charAt(i)).append(count);
+            count = 1;
         }
-        return sb.toString();
+        arr[num - 1] = sb.toString();
     }
 }

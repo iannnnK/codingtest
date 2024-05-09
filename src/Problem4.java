@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 
 public class Problem4 {
@@ -14,18 +15,18 @@ public class Problem4 {
         calcSunday(input);
     }
 
-    private static int getFirstDayOfWeek(LocalDate localDate) {
-        return localDate.withDayOfMonth(1).getDayOfWeek().getValue();
+    private static int getFirstDayOfWeek(YearMonth localMonth) {
+        return localMonth.atDay(1).getDayOfWeek().getValue();
     }
 
-    private static int calcMonthInfo(LocalDate localDate) {
-        boolean leapYear = localDate.isLeapYear();
-        return localDate.getMonth().length(leapYear);
+    private static int calcMonthInfo(YearMonth localMonth) {
+        boolean leapYear = localMonth.isLeapYear();
+        return localMonth.getMonth().length(leapYear);
     }
 
     private static void calcSunday(String input) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        LocalDate inputDate = LocalDate.parse(input, formatter);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMM");
+        YearMonth inputDate = YearMonth.parse(input, formatter);
 
         int startDayOfWeek = getFirstDayOfWeek(inputDate);
         int countOfDay = calcMonthInfo(inputDate);
