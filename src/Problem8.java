@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 public class Problem8 {
     private static final String pattern = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*\\W).{8,}+$";
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         boolean check = validPassword(br.readLine());

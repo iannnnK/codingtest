@@ -11,36 +11,46 @@ import java.util.*;
 
 * */
 public class Problem6 {
-    public static void main(String[] args) throws IOException {
-        List<String> list = new ArrayList<>();
 
+    /*
+    테스트 케이스
+    ian.png -> ian.png
+    ian.png -> ian(1).png
+    ian(1).png -> ian(2).png
+    ian(1).png.png -> ian(1).png.png
+    ian.png.png -> ian.png.png
+    ian(1).png(1).png -> ian(1).png(1).png
+    */
+
+
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        Map<FileName, Integer> map = new HashMap<>();
+        List<FileName> fileNameList = new ArrayList<>();
+
         while (true) {
             String input = br.readLine();
             if ("stop".equals(input)) {
                 break;
             }
-            createFile(input, map);
-            System.out.println();
-        }
 
-        //
+            createFile(input, fileNameList);
+            System.out.println(fileNameList);
+        }
 
     }
 
-    private static void createFile(String input, Map<FileName, Integer> map) {
+    private static void createFile(String input, List<FileName> fileNameList) {
         FileName file = new FileName(input);
-        if (map.containsKey(file)) {
-//            map.compute(file, (k, num) -> num + 1);
-            int num = map.get(file);
-            map.put(file, num + 1);
-//            file.setNum(num + 1);
-        } else {
-            map.put(file, 0);
-        }
 
+        if (fileNameList.indexOf(file) == -1) {
+            System.out.println("new");
+            fileNameList.add(file);
+        } else {
+            System.out.println("duplicated");
+            FileName dupFileName = fileNameList.get(fileNameList.indexOf(file));
+            dupFileName.createNewFile(file);
+        }
         System.out.println(file);
     }
 }
@@ -60,19 +70,20 @@ class FileName {
         int dotIdx = input.lastIndexOf('.');
         String name = input.substring(0, dotIdx);
         extractNumberIdx(name);
-        this.ext = input.substring(dotIdx);
+        this.ext = input.substring(dotIdx + 1);
     }
 
     // 적절한 위치에 괄호와 숫자가 존재하는지 판별
     private void extractNumberIdx(String name) {
+        this.name = name;
         int open = name.lastIndexOf('(');
         int close = name.lastIndexOf(')');
 
-        if (close == -1 || close != name.length() - 1 || open == -1)
+        if (close == -1 || close != name.length() - 1 || open == -1) {
             return;
+        }
 
         String number = name.substring(open + 1, close);
-        System.out.println("괄호 안 문자열 : " + number);
         for (char num : number.toCharArray()) {
             if (!Character.isDigit(num)) {
                 return;
@@ -84,21 +95,18 @@ class FileName {
         return;
     }
 
-    private void createNewFile(FileName o) {
-
-        // checkDuplicateName()
-
+    public void createNewFile(FileName o) {
+        if(this.next == null) {
+            o.setNum(this.num + 1);
+            this.next = o;
+            System.out.println("새로운 파일 : " + o);
+            return;
+        }
+        this.next.createNewFile(o);
     }
 
-    private boolean checkDuplicateName() {
-        // name - null, "" 체크
-
-        // 같은지
-            // 같으면 num - null, "" 체크
-
-            // num 같은지
-            // 다르면
-        return false;
+    public void setNum(int num) {
+        this.num = num;
     }
 
     @Override
@@ -116,7 +124,7 @@ class FileName {
 
     @Override
     public String toString() {
-        if ("".equals(num)) {
+        if (num == 0) {
             return name + "." + ext;
         }
         return name + "(" + num + ")." + ext;
