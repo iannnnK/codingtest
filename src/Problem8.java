@@ -8,11 +8,11 @@ public class Problem8 {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        boolean check = validPassword(br.readLine());
+        boolean check = validCheckPassword(br.readLine());
         System.out.println(check);
     }
 
-    private static boolean validPassword(String input) {
+    private static boolean validCheckPassword(String input) {
         return Pattern.matches(pattern, input);
     }
 }

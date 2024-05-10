@@ -43,15 +43,16 @@ public class Problem6 {
     private static void createFile(String input, List<FileName> fileNameList) {
         FileName file = new FileName(input);
 
-        if (fileNameList.indexOf(file) == -1) {
+        if (!fileNameList.contains(file)) {
             System.out.println("new");
             fileNameList.add(file);
+            System.out.println(file);
         } else {
             System.out.println("duplicated");
             FileName dupFileName = fileNameList.get(fileNameList.indexOf(file));
             dupFileName.createNewFile(file);
         }
-        System.out.println(file);
+
     }
 }
 
